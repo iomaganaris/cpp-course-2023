@@ -4,8 +4,8 @@
 #include <utility>
 
 template <typename F, typename TupleLike, std::size_t... Is>
-decltype(auto) myapply_helper(/* what goes here? */) {
-    return /* what goes here? */;
+decltype(auto) myapply_helper(std::integer_sequence<std::size_t, Is...>&& int_seq, F&& f, TupleLike&& t) {
+    return std::apply(f, t);
 }
 
 template <typename F, typename TupleLike>
@@ -23,16 +23,16 @@ struct myclass {
 
 int main() {
     // Implement myapply_helper correctly to get the following to compile
-    // myapply([] { std::cout << "first tuple-like: ()\n"; }, std::tuple<>{});
-    // myapply([](int x,
-    //            double y) { std::cout << "second tuple-like: (" << x << ", " << y << ")\n"; },
-    //         std::pair<int, double>{ 42, 3.14 });
-    // myapply(
-    //     [](std::string x, std::string y, std::string z) {
-    //         std::cout << "second tuple-like: (" << x << ", " << y << "," << z << ")\n";
-    //     },
-    //     std::array<std::string, 3>{ "hello", "c++", "course" });
+    myapply([] { std::cout << "first tuple-like: ()\n"; }, std::tuple<>{});
+    myapply([](int x,
+               double y) { std::cout << "second tuple-like: (" << x << ", " << y << ")\n"; },
+            std::pair<int, double>{ 42, 3.14 });
+    myapply(
+        [](std::string x, std::string y, std::string z) {
+            std::cout << "second tuple-like: (" << x << ", " << y << ", " << z << ")\n";
+        },
+        std::array<std::string, 3>{ "hello", "c++", "course" });
 
     // Extra: make the following compile as well
-    // myapply(&myclass::f, std::tuple(myclass{}, 42));
+    myapply(&myclass::f, std::tuple(myclass{}, 42));
 }
