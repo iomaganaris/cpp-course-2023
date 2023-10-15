@@ -2,6 +2,7 @@
 #include <memory>
 #include <variant>
 
+// Below is needed to make sure that overloaded returns the proper type
 template <class... Ts>
 struct overloaded : Ts... {
     using Ts::operator()...;
@@ -9,6 +10,7 @@ struct overloaded : Ts... {
 
 template <class... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
+///////////////////////////////////////////////////////////////////////
 
 struct lit {
     int x;
