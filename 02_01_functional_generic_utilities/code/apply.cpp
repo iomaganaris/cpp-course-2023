@@ -5,7 +5,7 @@
 
 template <typename F, typename TupleLike, std::size_t... Is>
 decltype(auto) myapply_helper(std::integer_sequence<std::size_t, Is...>&& int_seq, F&& f, TupleLike&& t) {
-    return std::apply(f, t);
+    return std::invoke(std::forward<F>(f), std::get<Is>(std::forward<TupleLike>(t))...);
 }
 
 template <typename F, typename TupleLike>
